@@ -625,7 +625,6 @@
             }
         }
 
-        /* Close button on modal */
         .password-modal .modal-close-btn {
             position: absolute;
             top: 15px;
@@ -729,7 +728,6 @@
             box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
         }
 
-        /* Close/Use other tools button */
         .password-modal .close-btn {
             background: #f0f0f0;
             border: 2px solid #e0e0e0;
@@ -1263,7 +1261,6 @@
     <!-- Password Modal Overlay -->
     <div class="password-modal-overlay" id="passwordModal" style="display: none;">
         <div class="password-modal">
-            <!-- Top-right close (X) button -->
             <button class="modal-close-btn" onclick="closePasswordModal()" title="Close">
                 <i class="fas fa-times"></i>
             </button>
@@ -1333,12 +1330,10 @@
                 }
             });
 
-            // Check if encode was previously unlocked
             if (sessionStorage.getItem('encodeUnlocked') === 'true') {
                 isEncodeUnlocked = true;
             }
 
-            // Allow Enter key in password modal
             document.getElementById('modalPasswordInput').addEventListener('keydown', (e) => {
                 if (e.key === 'Enter') {
                     verifyPassword();
@@ -1348,7 +1343,6 @@
                 }
             });
 
-            // Close modal when clicking outside the modal box
             document.getElementById('passwordModal').addEventListener('click', (e) => {
                 if (e.target === document.getElementById('passwordModal')) {
                     closePasswordModal();
@@ -1366,7 +1360,6 @@
             const menuBtn = document.getElementById(`menu-${tool}`);
             if (menuBtn) menuBtn.classList.add('active');
             
-            // Check if encode tool is locked
             if (tool === 'encode' && !isEncodeUnlocked) {
                 showPasswordModal();
                 return;
@@ -1427,11 +1420,9 @@
             modal.style.display = 'none';
         }
 
-        // Close modal and let the user continue with other tools
         function closePasswordModal() {
             hidePasswordModal();
             
-            // If the user was trying to open encode, revert menu highlight to IP tool
             if (currentTool === 'encode' && !isEncodeUnlocked) {
                 currentTool = 'ip';
                 document.querySelectorAll('.cyber-btn').forEach(btn => {
@@ -1461,7 +1452,6 @@
                 hidePasswordModal();
                 showToast('✅ Access granted! Welcome to Encoder/Decoder.');
                 
-                // Load the encode tool
                 document.querySelectorAll('.cyber-btn').forEach(btn => {
                     btn.classList.remove('active');
                 });
@@ -1663,18 +1653,17 @@
             `;
         }
 
-        // ==================== ENCODER/DECODER TOOL (PASSWORD PROTECTED) ====================
+        // ==================== ENCODER/DECODER TOOL (PASSWORD PROTECTED - 10 TOOLS) ====================
         function getEncodeToolHTML() {
             return `
                 <div class="tool-header">
                     <div class="tool-icon">🔄</div>
                     <div class="tool-title">
                         <h2>ENCODER / DECODER</h2>
-                        <p>>_ Base64, Binary, ASCII, HEX, URL, Unicode & Morse</p>
+                        <p>>_ Base64, Binary, ASCII, HEX, URL, Unicode, Morse, ROT13, Octal & Atbash</p>
                     </div>
                 </div>
 
-                <!-- Unlocked indicator -->
                 <div style="background: linear-gradient(135deg, #10b98110, #10b98120); border: 1px solid #10b981; border-radius: 10px; padding: 10px 15px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
                     <i class="fas fa-unlock-alt" style="color: #10b981; font-size: 1.2em;"></i>
                     <span style="color: #10b981; font-weight: 600;">ACCESS GRANTED - Password Protected Tool Unlocked</span>
@@ -1683,32 +1672,41 @@
                     </button>
                 </div>
 
-                <!-- Tabs Row 1: Base64, Binary, ASCII, HEX -->
+                <!-- Tabs Row 1: Base64, Binary, ASCII, HEX, URL -->
                 <div style="display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap;">
-                    <button class="btn-primary" id="tab-base64" onclick="switchEncodeTab('base64')" style="flex: 1; min-width: 100px; font-size: 0.85em; padding: 10px 8px;">
+                    <button class="btn-primary" id="tab-base64" onclick="switchEncodeTab('base64')" style="flex: 1; min-width: 90px; font-size: 0.8em; padding: 10px 6px;">
                         <i class="fas fa-code"></i> BASE64
                     </button>
-                    <button class="btn-secondary" id="tab-binary" onclick="switchEncodeTab('binary')" style="flex: 1; min-width: 100px; font-size: 0.85em; padding: 10px 8px;">
+                    <button class="btn-secondary" id="tab-binary" onclick="switchEncodeTab('binary')" style="flex: 1; min-width: 90px; font-size: 0.8em; padding: 10px 6px;">
                         <i class="fas fa-robot"></i> BINARY
                     </button>
-                    <button class="btn-secondary" id="tab-ascii" onclick="switchEncodeTab('ascii')" style="flex: 1; min-width: 100px; font-size: 0.85em; padding: 10px 8px;">
+                    <button class="btn-secondary" id="tab-ascii" onclick="switchEncodeTab('ascii')" style="flex: 1; min-width: 90px; font-size: 0.8em; padding: 10px 6px;">
                         <i class="fas fa-font"></i> ASCII
                     </button>
-                    <button class="btn-secondary" id="tab-hex" onclick="switchEncodeTab('hex')" style="flex: 1; min-width: 100px; font-size: 0.85em; padding: 10px 8px;">
+                    <button class="btn-secondary" id="tab-hex" onclick="switchEncodeTab('hex')" style="flex: 1; min-width: 90px; font-size: 0.8em; padding: 10px 6px;">
                         <i class="fas fa-hashtag"></i> HEX
+                    </button>
+                    <button class="btn-secondary" id="tab-url" onclick="switchEncodeTab('url')" style="flex: 1; min-width: 90px; font-size: 0.8em; padding: 10px 6px;">
+                        <i class="fas fa-link"></i> URL
                     </button>
                 </div>
 
-                <!-- Tabs Row 2: URL, Unicode, Morse -->
+                <!-- Tabs Row 2: Unicode, Morse, ROT13, Octal, Atbash -->
                 <div style="display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap;">
-                    <button class="btn-secondary" id="tab-url" onclick="switchEncodeTab('url')" style="flex: 1; min-width: 100px; font-size: 0.85em; padding: 10px 8px;">
-                        <i class="fas fa-link"></i> URL
-                    </button>
-                    <button class="btn-secondary" id="tab-unicode" onclick="switchEncodeTab('unicode')" style="flex: 1; min-width: 100px; font-size: 0.85em; padding: 10px 8px;">
+                    <button class="btn-secondary" id="tab-unicode" onclick="switchEncodeTab('unicode')" style="flex: 1; min-width: 90px; font-size: 0.8em; padding: 10px 6px;">
                         <i class="fas fa-globe"></i> UNICODE
                     </button>
-                    <button class="btn-secondary" id="tab-morse" onclick="switchEncodeTab('morse')" style="flex: 1; min-width: 100px; font-size: 0.85em; padding: 10px 8px;">
+                    <button class="btn-secondary" id="tab-morse" onclick="switchEncodeTab('morse')" style="flex: 1; min-width: 90px; font-size: 0.8em; padding: 10px 6px;">
                         <i class="fas fa-broadcast-tower"></i> MORSE
+                    </button>
+                    <button class="btn-secondary" id="tab-rot13" onclick="switchEncodeTab('rot13')" style="flex: 1; min-width: 90px; font-size: 0.8em; padding: 10px 6px;">
+                        <i class="fas fa-sync-alt"></i> ROT13
+                    </button>
+                    <button class="btn-secondary" id="tab-octal" onclick="switchEncodeTab('octal')" style="flex: 1; min-width: 90px; font-size: 0.8em; padding: 10px 6px;">
+                        <i class="fas fa-circle"></i> OCTAL
+                    </button>
+                    <button class="btn-secondary" id="tab-atbash" onclick="switchEncodeTab('atbash')" style="flex: 1; min-width: 90px; font-size: 0.8em; padding: 10px 6px;">
+                        <i class="fas fa-exchange-alt"></i> ATBASH
                     </button>
                 </div>
 
@@ -1939,6 +1937,105 @@
                     <div id="morseError" class="error-message" style="display: none;"></div>
                 </div>
 
+                <!-- ===== ROT13 Section ===== -->
+                <div id="encode-rot13-section" style="display: none;">
+                    <div class="input-group">
+                        <label><i class="fas fa-sync-alt"></i> TEXT TO ROT13 :</label>
+                        <textarea id="rot13TextInput" class="input-field" rows="3" placeholder="Enter text to encode with ROT13..."></textarea>
+                    </div>
+                    
+                    <button class="btn-primary" onclick="textToRot13()" style="margin-bottom: 15px;">
+                        <i class="fas fa-arrow-right"></i> ENCODE → ROT13
+                    </button>
+                    
+                    <div class="input-group">
+                        <label><i class="fas fa-sync-alt"></i> ROT13 TO TEXT :</label>
+                        <textarea id="rot13Input" class="input-field" rows="3" placeholder="Enter ROT13 text to decode..."></textarea>
+                    </div>
+                    
+                    <button class="btn-primary" onclick="rot13ToText()">
+                        <i class="fas fa-arrow-left"></i> DECODE ← ROT13
+                    </button>
+                    
+                    <div id="rot13Result" class="result-box" style="display: none;">
+                        <div class="result-title">
+                            <i class="fas fa-file-alt"></i> RESULT:
+                            <button class="btn-secondary" style="margin-left: auto; padding: 5px 10px;" onclick="copyResult('rot13Content')">
+                                <i class="fas fa-copy"></i> COPY
+                            </button>
+                        </div>
+                        <div id="rot13Content" class="result-content" style="word-break: break-all; font-family: monospace;"></div>
+                    </div>
+                    
+                    <div id="rot13Error" class="error-message" style="display: none;"></div>
+                </div>
+
+                <!-- ===== Octal Section ===== -->
+                <div id="encode-octal-section" style="display: none;">
+                    <div class="input-group">
+                        <label><i class="fas fa-circle"></i> TEXT TO OCTAL :</label>
+                        <textarea id="octalTextInput" class="input-field" rows="3" placeholder="Enter text to convert to octal..."></textarea>
+                    </div>
+                    
+                    <button class="btn-primary" onclick="textToOctal()" style="margin-bottom: 15px;">
+                        <i class="fas fa-arrow-right"></i> TEXT → OCTAL
+                    </button>
+                    
+                    <div class="input-group">
+                        <label><i class="fas fa-circle"></i> OCTAL TO TEXT :</label>
+                        <textarea id="octalInput" class="input-field" rows="3" placeholder="Enter octal values separated by spaces (e.g., 110 145 154 154 157)"></textarea>
+                    </div>
+                    
+                    <button class="btn-primary" onclick="octalToText()">
+                        <i class="fas fa-arrow-left"></i> OCTAL → TEXT
+                    </button>
+                    
+                    <div id="octalResult" class="result-box" style="display: none;">
+                        <div class="result-title">
+                            <i class="fas fa-file-alt"></i> RESULT:
+                            <button class="btn-secondary" style="margin-left: auto; padding: 5px 10px;" onclick="copyResult('octalContent')">
+                                <i class="fas fa-copy"></i> COPY
+                            </button>
+                        </div>
+                        <div id="octalContent" class="result-content" style="word-break: break-all; font-family: monospace;"></div>
+                    </div>
+                    
+                    <div id="octalError" class="error-message" style="display: none;"></div>
+                </div>
+
+                <!-- ===== Atbash Section ===== -->
+                <div id="encode-atbash-section" style="display: none;">
+                    <div class="input-group">
+                        <label><i class="fas fa-exchange-alt"></i> TEXT TO ATBASH :</label>
+                        <textarea id="atbashTextInput" class="input-field" rows="3" placeholder="Enter text to encode with Atbash cipher..."></textarea>
+                    </div>
+                    
+                    <button class="btn-primary" onclick="textToAtbash()" style="margin-bottom: 15px;">
+                        <i class="fas fa-arrow-right"></i> ENCODE → ATBASH
+                    </button>
+                    
+                    <div class="input-group">
+                        <label><i class="fas fa-exchange-alt"></i> ATBASH TO TEXT :</label>
+                        <textarea id="atbashInput" class="input-field" rows="3" placeholder="Enter Atbash cipher text to decode..."></textarea>
+                    </div>
+                    
+                    <button class="btn-primary" onclick="atbashToText()">
+                        <i class="fas fa-arrow-left"></i> DECODE ← ATBASH
+                    </button>
+                    
+                    <div id="atbashResult" class="result-box" style="display: none;">
+                        <div class="result-title">
+                            <i class="fas fa-file-alt"></i> RESULT:
+                            <button class="btn-secondary" style="margin-left: auto; padding: 5px 10px;" onclick="copyResult('atbashContent')">
+                                <i class="fas fa-copy"></i> COPY
+                            </button>
+                        </div>
+                        <div id="atbashContent" class="result-content" style="word-break: break-all; font-family: monospace;"></div>
+                    </div>
+                    
+                    <div id="atbashError" class="error-message" style="display: none;"></div>
+                </div>
+
                 <div class="developer-credit" style="margin-top: 20px; text-align: center; padding: 10px; background: linear-gradient(135deg, #667eea10, #764ba210); border-radius: 8px;">
                     <i class="fas fa-crown" style="color: #fbbf24;"></i> DEVELOPED BY <span class="neon-text" style="color: #667eea; font-weight: bold;">@TH3Cen_cee</span>
                 </div>
@@ -1955,8 +2052,8 @@
 
         // ==================== TAB SWITCHING FOR ENCODER/DECODER ====================
         function switchEncodeTab(tab) {
-            const sections = ['base64', 'binary', 'ascii', 'hex', 'url', 'unicode', 'morse'];
-            const tabs = ['tab-base64', 'tab-binary', 'tab-ascii', 'tab-hex', 'tab-url', 'tab-unicode', 'tab-morse'];
+            const sections = ['base64', 'binary', 'ascii', 'hex', 'url', 'unicode', 'morse', 'rot13', 'octal', 'atbash'];
+            const tabs = ['tab-base64', 'tab-binary', 'tab-ascii', 'tab-hex', 'tab-url', 'tab-unicode', 'tab-morse', 'tab-rot13', 'tab-octal', 'tab-atbash'];
 
             sections.forEach(s => {
                 const el = document.getElementById(`encode-${s}-section`);
@@ -1984,252 +2081,152 @@
         // ==================== BASE64 FUNCTIONS ====================
         function encodeBase64() {
             const input = document.getElementById('base64Input').value;
-            
-            if (!input) {
-                showError('base64Error', '⚠️ PLEASE ENTER TEXT TO ENCODE');
-                return;
-            }
-            
+            if (!input) { showError('base64Error', '⚠️ PLEASE ENTER TEXT TO ENCODE'); return; }
             try {
                 const encoded = btoa(unescape(encodeURIComponent(input)));
                 document.getElementById('base64Content').innerHTML = encoded;
-                showElement('base64Result');
-                hideElement('base64Error');
+                showElement('base64Result'); hideElement('base64Error');
                 showToast('🔐 Encoded to Base64!');
-            } catch (error) {
-                showError('base64Error', '⚠️ ENCODING FAILED');
-            }
+            } catch (error) { showError('base64Error', '⚠️ ENCODING FAILED'); }
         }
 
         function decodeBase64() {
             const input = document.getElementById('base64Input').value;
-            
-            if (!input) {
-                showError('base64Error', '⚠️ PLEASE ENTER BASE64 TEXT TO DECODE');
-                return;
-            }
-            
+            if (!input) { showError('base64Error', '⚠️ PLEASE ENTER BASE64 TEXT TO DECODE'); return; }
             try {
                 const decoded = decodeURIComponent(escape(atob(input)));
                 document.getElementById('base64Content').innerHTML = decoded;
-                showElement('base64Result');
-                hideElement('base64Error');
+                showElement('base64Result'); hideElement('base64Error');
                 showToast('🔓 Decoded from Base64!');
-            } catch (error) {
-                showError('base64Error', '⚠️ INVALID BASE64 STRING');
-            }
+            } catch (error) { showError('base64Error', '⚠️ INVALID BASE64 STRING'); }
         }
 
         // ==================== BINARY FUNCTIONS ====================
         function textToBinary() {
             const text = document.getElementById('binaryTextInput').value;
-            
-            if (!text) {
-                showError('binaryError', '⚠️ PLEASE ENTER TEXT TO CONVERT TO BINARY');
-                return;
-            }
-            
+            if (!text) { showError('binaryError', '⚠️ PLEASE ENTER TEXT TO CONVERT TO BINARY'); return; }
             try {
                 let binaryResult = '';
                 for (let i = 0; i < text.length; i++) {
-                    const charCode = text.charCodeAt(i);
-                    const binary = charCode.toString(2).padStart(8, '0');
-                    binaryResult += binary + ' ';
+                    binaryResult += text.charCodeAt(i).toString(2).padStart(8, '0') + ' ';
                 }
-                
                 document.getElementById('binaryContent').innerHTML = binaryResult.trim();
-                showElement('binaryResult');
-                hideElement('binaryError');
+                showElement('binaryResult'); hideElement('binaryError');
                 showToast('🤖 Converted to Binary!');
-            } catch (error) {
-                showError('binaryError', '⚠️ CONVERSION FAILED');
-            }
+            } catch (error) { showError('binaryError', '⚠️ CONVERSION FAILED'); }
         }
 
         function binaryToText() {
             const binaryInput = document.getElementById('binaryInput').value.trim();
-            
-            if (!binaryInput) {
-                showError('binaryError', '⚠️ PLEASE ENTER BINARY TO CONVERT TO TEXT');
-                return;
-            }
-            
+            if (!binaryInput) { showError('binaryError', '⚠️ PLEASE ENTER BINARY TO CONVERT TO TEXT'); return; }
             try {
                 const binaryArray = binaryInput.split(/\s+/);
                 let textResult = '';
-                
                 for (let i = 0; i < binaryArray.length; i++) {
                     const cleanBinary = binaryArray[i].replace(/[^01]/g, '');
                     if (cleanBinary.length === 0) continue;
-                    
                     const charCode = parseInt(cleanBinary, 2);
                     if (isNaN(charCode)) continue;
-                    
                     textResult += String.fromCharCode(charCode);
                 }
-                
-                if (textResult.length === 0) {
-                    throw new Error('Invalid binary input');
-                }
-                
+                if (textResult.length === 0) throw new Error('Invalid binary input');
                 document.getElementById('binaryContent').innerHTML = textResult;
-                showElement('binaryResult');
-                hideElement('binaryError');
+                showElement('binaryResult'); hideElement('binaryError');
                 showToast('🔓 Decoded from Binary!');
             } catch (error) {
-                showError('binaryError', '⚠️ INVALID BINARY STRING. Please use space-separated 8-bit binary (e.g., 01001000 01101001)');
+                showError('binaryError', '⚠️ INVALID BINARY STRING. Use space-separated 8-bit binary.');
             }
         }
 
         // ==================== ASCII FUNCTIONS ====================
         function textToAscii() {
             const text = document.getElementById('asciiTextInput').value;
-            
-            if (!text) {
-                showError('asciiError', '⚠️ PLEASE ENTER TEXT TO CONVERT TO ASCII');
-                return;
-            }
-            
+            if (!text) { showError('asciiError', '⚠️ PLEASE ENTER TEXT TO CONVERT TO ASCII'); return; }
             try {
                 let asciiResult = '';
                 for (let i = 0; i < text.length; i++) {
                     asciiResult += text.charCodeAt(i) + ' ';
                 }
-                
                 document.getElementById('asciiContent').innerHTML = asciiResult.trim();
-                showElement('asciiResult');
-                hideElement('asciiError');
+                showElement('asciiResult'); hideElement('asciiError');
                 showToast('🔤 Converted to ASCII!');
-            } catch (error) {
-                showError('asciiError', '⚠️ CONVERSION FAILED');
-            }
+            } catch (error) { showError('asciiError', '⚠️ CONVERSION FAILED'); }
         }
 
         function asciiToText() {
             const asciiInput = document.getElementById('asciiInput').value.trim();
-            
-            if (!asciiInput) {
-                showError('asciiError', '⚠️ PLEASE ENTER ASCII CODES TO CONVERT TO TEXT');
-                return;
-            }
-            
+            if (!asciiInput) { showError('asciiError', '⚠️ PLEASE ENTER ASCII CODES'); return; }
             try {
                 const asciiArray = asciiInput.split(/\s+/);
                 let textResult = '';
-                
                 for (let i = 0; i < asciiArray.length; i++) {
                     const code = parseInt(asciiArray[i], 10);
                     if (isNaN(code) || code < 0 || code > 127) continue;
-                    
                     textResult += String.fromCharCode(code);
                 }
-                
-                if (textResult.length === 0) {
-                    throw new Error('Invalid ASCII input');
-                }
-                
+                if (textResult.length === 0) throw new Error('Invalid ASCII input');
                 document.getElementById('asciiContent').innerHTML = textResult;
-                showElement('asciiResult');
-                hideElement('asciiError');
+                showElement('asciiResult'); hideElement('asciiError');
                 showToast('🔓 Decoded from ASCII!');
             } catch (error) {
-                showError('asciiError', '⚠️ INVALID ASCII CODES. Please use space-separated numbers (e.g., 72 101 108 108 111)');
+                showError('asciiError', '⚠️ INVALID ASCII CODES. Use space-separated numbers.');
             }
         }
 
         // ==================== HEX FUNCTIONS ====================
         function textToHex() {
             const text = document.getElementById('hexTextInput').value;
-            
-            if (!text) {
-                showError('hexError', '⚠️ PLEASE ENTER TEXT TO CONVERT TO HEX');
-                return;
-            }
-            
+            if (!text) { showError('hexError', '⚠️ PLEASE ENTER TEXT TO CONVERT TO HEX'); return; }
             try {
                 let hexResult = '';
                 for (let i = 0; i < text.length; i++) {
-                    const hex = text.charCodeAt(i).toString(16).padStart(2, '0');
-                    hexResult += hex + ' ';
+                    hexResult += text.charCodeAt(i).toString(16).padStart(2, '0') + ' ';
                 }
-                
                 document.getElementById('hexContent').innerHTML = hexResult.trim().toUpperCase();
-                showElement('hexResult');
-                hideElement('hexError');
+                showElement('hexResult'); hideElement('hexError');
                 showToast('🔢 Converted to HEX!');
-            } catch (error) {
-                showError('hexError', '⚠️ CONVERSION FAILED');
-            }
+            } catch (error) { showError('hexError', '⚠️ CONVERSION FAILED'); }
         }
 
         function hexToText() {
             const hexInput = document.getElementById('hexInput').value.trim();
-            
-            if (!hexInput) {
-                showError('hexError', '⚠️ PLEASE ENTER HEX VALUES TO CONVERT TO TEXT');
-                return;
-            }
-            
+            if (!hexInput) { showError('hexError', '⚠️ PLEASE ENTER HEX VALUES'); return; }
             try {
                 const hexArray = hexInput.split(/\s+/);
                 let textResult = '';
-                
                 for (let i = 0; i < hexArray.length; i++) {
                     const cleanHex = hexArray[i].replace(/[^0-9a-fA-F]/g, '');
                     if (cleanHex.length === 0) continue;
-                    
                     const charCode = parseInt(cleanHex, 16);
                     if (isNaN(charCode)) continue;
-                    
                     textResult += String.fromCharCode(charCode);
                 }
-                
-                if (textResult.length === 0) {
-                    throw new Error('Invalid hex input');
-                }
-                
+                if (textResult.length === 0) throw new Error('Invalid hex input');
                 document.getElementById('hexContent').innerHTML = textResult;
-                showElement('hexResult');
-                hideElement('hexError');
+                showElement('hexResult'); hideElement('hexError');
                 showToast('🔓 Decoded from HEX!');
             } catch (error) {
-                showError('hexError', '⚠️ INVALID HEX VALUES. Please use space-separated hex bytes (e.g., 48 65 6C 6C 6F)');
+                showError('hexError', '⚠️ INVALID HEX VALUES. Use space-separated hex bytes.');
             }
         }
 
         // ==================== URL ENCODING FUNCTIONS ====================
         function textToURL() {
             const text = document.getElementById('urlTextInput').value;
-            
-            if (!text) {
-                showError('urlError', '⚠️ PLEASE ENTER TEXT TO URL ENCODE');
-                return;
-            }
-            
+            if (!text) { showError('urlError', '⚠️ PLEASE ENTER TEXT TO URL ENCODE'); return; }
             try {
-                const encoded = encodeURIComponent(text);
-                document.getElementById('urlContent').innerHTML = encoded;
-                showElement('urlResult');
-                hideElement('urlError');
+                document.getElementById('urlContent').innerHTML = encodeURIComponent(text);
+                showElement('urlResult'); hideElement('urlError');
                 showToast('🔗 URL Encoded!');
-            } catch (error) {
-                showError('urlError', '⚠️ ENCODING FAILED');
-            }
+            } catch (error) { showError('urlError', '⚠️ ENCODING FAILED'); }
         }
 
         function urlToText() {
             const urlInput = document.getElementById('urlInput').value.trim();
-            
-            if (!urlInput) {
-                showError('urlError', '⚠️ PLEASE ENTER URL ENCODED TEXT TO DECODE');
-                return;
-            }
-            
+            if (!urlInput) { showError('urlError', '⚠️ PLEASE ENTER URL ENCODED TEXT'); return; }
             try {
-                const decoded = decodeURIComponent(urlInput);
-                document.getElementById('urlContent').innerHTML = decoded;
-                showElement('urlResult');
-                hideElement('urlError');
+                document.getElementById('urlContent').innerHTML = decodeURIComponent(urlInput);
+                showElement('urlResult'); hideElement('urlError');
                 showToast('🔓 URL Decoded!');
             } catch (error) {
                 showError('urlError', '⚠️ INVALID URL ENCODING. Please check your input.');
@@ -2239,48 +2236,28 @@
         // ==================== UNICODE FUNCTIONS ====================
         function textToUnicode() {
             const text = document.getElementById('unicodeTextInput').value;
-            
-            if (!text) {
-                showError('unicodeError', '⚠️ PLEASE ENTER TEXT TO CONVERT TO UNICODE');
-                return;
-            }
-            
+            if (!text) { showError('unicodeError', '⚠️ PLEASE ENTER TEXT TO CONVERT TO UNICODE'); return; }
             try {
                 let unicodeResult = '';
                 for (let i = 0; i < text.length; i++) {
-                    const code = text.charCodeAt(i).toString(16).toUpperCase().padStart(4, '0');
-                    unicodeResult += '\\u' + code;
+                    unicodeResult += '\\u' + text.charCodeAt(i).toString(16).toUpperCase().padStart(4, '0');
                 }
-                
                 document.getElementById('unicodeContent').innerHTML = unicodeResult;
-                showElement('unicodeResult');
-                hideElement('unicodeError');
+                showElement('unicodeResult'); hideElement('unicodeError');
                 showToast('🌐 Converted to Unicode!');
-            } catch (error) {
-                showError('unicodeError', '⚠️ CONVERSION FAILED');
-            }
+            } catch (error) { showError('unicodeError', '⚠️ CONVERSION FAILED'); }
         }
 
         function unicodeToText() {
             const unicodeInput = document.getElementById('unicodeInput').value.trim();
-            
-            if (!unicodeInput) {
-                showError('unicodeError', '⚠️ PLEASE ENTER UNICODE ESCAPES TO CONVERT TO TEXT');
-                return;
-            }
-            
+            if (!unicodeInput) { showError('unicodeError', '⚠️ PLEASE ENTER UNICODE ESCAPES'); return; }
             try {
                 let textResult = unicodeInput.replace(/\\u([0-9a-fA-F]{4})/g, (match, hex) => {
                     return String.fromCharCode(parseInt(hex, 16));
                 });
-                
-                if (textResult === unicodeInput && unicodeInput.includes('\\u')) {
-                    throw new Error('No valid Unicode escapes found');
-                }
-                
+                if (textResult === unicodeInput && unicodeInput.includes('\\u')) throw new Error('No valid Unicode escapes');
                 document.getElementById('unicodeContent').innerHTML = textResult;
-                showElement('unicodeResult');
-                hideElement('unicodeError');
+                showElement('unicodeResult'); hideElement('unicodeError');
                 showToast('🔓 Decoded from Unicode!');
             } catch (error) {
                 showError('unicodeError', '⚠️ INVALID UNICODE. Use format \\u0048\\u0065\\u006C\\u006C\\u006F');
@@ -2311,16 +2288,10 @@
 
         function textToMorse() {
             const text = document.getElementById('morseTextInput').value;
-            
-            if (!text) {
-                showError('morseError', '⚠️ PLEASE ENTER TEXT TO CONVERT TO MORSE');
-                return;
-            }
-            
+            if (!text) { showError('morseError', '⚠️ PLEASE ENTER TEXT TO CONVERT TO MORSE'); return; }
             try {
                 const upperText = text.toUpperCase();
                 let morseResult = '';
-                
                 for (let i = 0; i < upperText.length; i++) {
                     const char = upperText[i];
                     if (morseMap[char]) {
@@ -2329,14 +2300,9 @@
                         morseResult += '/ ';
                     }
                 }
-                
-                if (morseResult.trim().length === 0) {
-                    throw new Error('No convertible characters');
-                }
-                
+                if (morseResult.trim().length === 0) throw new Error('No convertible characters');
                 document.getElementById('morseContent').innerHTML = morseResult.trim();
-                showElement('morseResult');
-                hideElement('morseError');
+                showElement('morseResult'); hideElement('morseError');
                 showToast('📡 Converted to Morse!');
             } catch (error) {
                 showError('morseError', '⚠️ CONVERSION FAILED. Some characters may not be supported.');
@@ -2345,16 +2311,10 @@
 
         function morseToText() {
             const morseInput = document.getElementById('morseInput').value.trim();
-            
-            if (!morseInput) {
-                showError('morseError', '⚠️ PLEASE ENTER MORSE CODE TO CONVERT TO TEXT');
-                return;
-            }
-            
+            if (!morseInput) { showError('morseError', '⚠️ PLEASE ENTER MORSE CODE'); return; }
             try {
                 const morseChars = morseInput.split(/\s+/);
                 let textResult = '';
-                
                 for (let i = 0; i < morseChars.length; i++) {
                     const code = morseChars[i];
                     if (code === '/') {
@@ -2363,26 +2323,112 @@
                         textResult += reverseMorseMap[code];
                     }
                 }
-                
-                if (textResult.length === 0) {
-                    throw new Error('Invalid Morse code');
-                }
-                
+                if (textResult.length === 0) throw new Error('Invalid Morse code');
                 document.getElementById('morseContent').innerHTML = textResult;
-                showElement('morseResult');
-                hideElement('morseError');
+                showElement('morseResult'); hideElement('morseError');
                 showToast('🔓 Decoded from Morse!');
             } catch (error) {
-                showError('morseError', '⚠️ INVALID MORSE CODE. Use dots and dashes separated by spaces (e.g., .... . .-.. .-.. ---)');
+                showError('morseError', '⚠️ INVALID MORSE CODE. Use dots and dashes separated by spaces.');
             }
+        }
+
+        // ==================== ROT13 FUNCTIONS ====================
+        function rot13(str) {
+            return str.replace(/[a-zA-Z]/g, function(c) {
+                const base = c <= 'Z' ? 65 : 97;
+                return String.fromCharCode((c.charCodeAt(0) - base + 13) % 26 + base);
+            });
+        }
+
+        function textToRot13() {
+            const text = document.getElementById('rot13TextInput').value;
+            if (!text) { showError('rot13Error', '⚠️ PLEASE ENTER TEXT TO ENCODE WITH ROT13'); return; }
+            try {
+                document.getElementById('rot13Content').innerHTML = rot13(text);
+                showElement('rot13Result'); hideElement('rot13Error');
+                showToast('🔄 Encoded with ROT13!');
+            } catch (error) { showError('rot13Error', '⚠️ ENCODING FAILED'); }
+        }
+
+        function rot13ToText() {
+            const rot13Input = document.getElementById('rot13Input').value;
+            if (!rot13Input) { showError('rot13Error', '⚠️ PLEASE ENTER ROT13 TEXT TO DECODE'); return; }
+            try {
+                document.getElementById('rot13Content').innerHTML = rot13(rot13Input);
+                showElement('rot13Result'); hideElement('rot13Error');
+                showToast('🔓 Decoded from ROT13!');
+            } catch (error) { showError('rot13Error', '⚠️ DECODING FAILED'); }
+        }
+
+        // ==================== OCTAL FUNCTIONS ====================
+        function textToOctal() {
+            const text = document.getElementById('octalTextInput').value;
+            if (!text) { showError('octalError', '⚠️ PLEASE ENTER TEXT TO CONVERT TO OCTAL'); return; }
+            try {
+                let octalResult = '';
+                for (let i = 0; i < text.length; i++) {
+                    octalResult += text.charCodeAt(i).toString(8).padStart(3, '0') + ' ';
+                }
+                document.getElementById('octalContent').innerHTML = octalResult.trim();
+                showElement('octalResult'); hideElement('octalError');
+                showToast('🔢 Converted to Octal!');
+            } catch (error) { showError('octalError', '⚠️ CONVERSION FAILED'); }
+        }
+
+        function octalToText() {
+            const octalInput = document.getElementById('octalInput').value.trim();
+            if (!octalInput) { showError('octalError', '⚠️ PLEASE ENTER OCTAL VALUES'); return; }
+            try {
+                const octalArray = octalInput.split(/\s+/);
+                let textResult = '';
+                for (let i = 0; i < octalArray.length; i++) {
+                    const cleanOctal = octalArray[i].replace(/[^0-7]/g, '');
+                    if (cleanOctal.length === 0) continue;
+                    const charCode = parseInt(cleanOctal, 8);
+                    if (isNaN(charCode)) continue;
+                    textResult += String.fromCharCode(charCode);
+                }
+                if (textResult.length === 0) throw new Error('Invalid octal input');
+                document.getElementById('octalContent').innerHTML = textResult;
+                showElement('octalResult'); hideElement('octalError');
+                showToast('🔓 Decoded from Octal!');
+            } catch (error) {
+                showError('octalError', '⚠️ INVALID OCTAL VALUES. Use space-separated octal numbers.');
+            }
+        }
+
+        // ==================== ATBASH FUNCTIONS ====================
+        function atbash(str) {
+            return str.replace(/[a-zA-Z]/g, function(c) {
+                const base = c <= 'Z' ? 65 : 97;
+                return String.fromCharCode(base + (25 - (c.charCodeAt(0) - base)));
+            });
+        }
+
+        function textToAtbash() {
+            const text = document.getElementById('atbashTextInput').value;
+            if (!text) { showError('atbashError', '⚠️ PLEASE ENTER TEXT TO ENCODE WITH ATBASH'); return; }
+            try {
+                document.getElementById('atbashContent').innerHTML = atbash(text);
+                showElement('atbashResult'); hideElement('atbashError');
+                showToast('🔄 Encoded with Atbash!');
+            } catch (error) { showError('atbashError', '⚠️ ENCODING FAILED'); }
+        }
+
+        function atbashToText() {
+            const atbashInput = document.getElementById('atbashInput').value;
+            if (!atbashInput) { showError('atbashError', '⚠️ PLEASE ENTER ATBASH TEXT TO DECODE'); return; }
+            try {
+                document.getElementById('atbashContent').innerHTML = atbash(atbashInput);
+                showElement('atbashResult'); hideElement('atbashError');
+                showToast('🔓 Decoded from Atbash!');
+            } catch (error) { showError('atbashError', '⚠️ DECODING FAILED'); }
         }
 
         // ==================== UNIVERSAL COPY FUNCTION ====================
         function copyResult(elementId) {
             const content = document.getElementById(elementId).innerText;
-            if (content) {
-                copyToClipboard(content);
-            }
+            if (content) copyToClipboard(content);
         }
 
         // ==================== PASSWORD TOOL ====================
@@ -2465,10 +2511,7 @@
             const text = toggleBtn.querySelector('.toggle-text');
             
             toggleBtn.classList.add('rotating');
-            
-            setTimeout(() => {
-                toggleBtn.classList.remove('rotating');
-            }, 500);
+            setTimeout(() => { toggleBtn.classList.remove('rotating'); }, 500);
             
             if (body.classList.contains('dark-mode')) {
                 body.classList.remove('dark-mode');
@@ -2490,7 +2533,6 @@
             if (toggleBtn) {
                 const icon = toggleBtn.querySelector('i');
                 const text = toggleBtn.querySelector('.toggle-text');
-                
                 if (isDark) {
                     icon.className = 'fas fa-sun';
                     text.textContent = 'LIGHT';
@@ -2503,25 +2545,16 @@
 
         function showToast(message) {
             let toastContainer = document.querySelector('.toast-container');
-            
             if (!toastContainer) {
                 toastContainer = document.createElement('div');
                 toastContainer.className = 'toast-container';
                 document.body.appendChild(toastContainer);
             }
-            
             const toast = document.createElement('div');
             toast.className = 'toast';
-            toast.innerHTML = `
-                <i class="fas ${message.includes('🌙') ? 'fa-moon' : 'fa-sun'}"></i>
-                <span>${message}</span>
-            `;
-            
+            toast.innerHTML = `<i class="fas ${message.includes('🌙') ? 'fa-moon' : 'fa-sun'}"></i><span>${message}</span>`;
             toastContainer.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.remove();
-            }, 3000);
+            setTimeout(() => { toast.remove(); }, 3000);
         }
 
         document.addEventListener('keydown', (e) => {
@@ -2534,15 +2567,10 @@
         // ==================== IP LOOKUP FUNCTIONS ====================
         async function lookupIP() {
             const ip = document.getElementById('ipInput').value.trim();
-            
-            if (!ip) {
-                showError('ipError', '⚠️ PLEASE ENTER IP ADDRESS');
-                return;
-            }
+            if (!ip) { showError('ipError', '⚠️ PLEASE ENTER IP ADDRESS'); return; }
 
             showLoading('ipLoading', true);
-            hideElement('ipResult');
-            hideElement('ipError');
+            hideElement('ipResult'); hideElement('ipError');
 
             try {
                 const proxyUrl = 'https://api.allorigins.win/get?url=';
@@ -2552,9 +2580,7 @@
                 const data = await response.json();
                 const ipData = JSON.parse(data.contents);
 
-                if (ipData.status !== 'success') {
-                    throw new Error('Invalid IP Address');
-                }
+                if (ipData.status !== 'success') throw new Error('Invalid IP Address');
 
                 const info = `
                     <div style="background: linear-gradient(135deg, #667eea10, #764ba210); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
@@ -2562,50 +2588,42 @@
                             <i class="fas fa-satellite-dish" style="font-size: 24px; color: #667eea; margin-right: 10px;"></i>
                             <span style="font-weight: bold; color: #667eea;">IP INFORMATION</span>
                         </div>
-                        
                         <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
                             <div style="background: white; padding: 12px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
                                 <i class="fas fa-globe" style="color: #667eea; margin-right: 8px;"></i>
                                 <span style="color: #666; font-size: 0.9em;">IP Address:</span>
                                 <div style="font-weight: bold; margin-top: 5px; color: #333;">${ipData.query}</div>
                             </div>
-                            
                             <div style="background: white; padding: 12px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
                                 <i class="fas fa-map-marker-alt" style="color: #667eea; margin-right: 8px;"></i>
                                 <span style="color: #666; font-size: 0.9em;">Country:</span>
                                 <div style="font-weight: bold; margin-top: 5px; color: #333;">${ipData.country}</div>
                             </div>
-                            
                             <div style="background: white; padding: 12px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
                                 <i class="fas fa-map" style="color: #667eea; margin-right: 8px;"></i>
                                 <span style="color: #666; font-size: 0.9em;">Region:</span>
                                 <div style="font-weight: bold; margin-top: 5px; color: #333;">${ipData.regionName}</div>
                             </div>
-                            
                             <div style="background: white; padding: 12px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
                                 <i class="fas fa-city" style="color: #667eea; margin-right: 8px;"></i>
                                 <span style="color: #666; font-size: 0.9em;">City:</span>
                                 <div style="font-weight: bold; margin-top: 5px; color: #333;">${ipData.city}</div>
                             </div>
-                            
                             <div style="background: white; padding: 12px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); grid-column: span 2;">
                                 <i class="fas fa-wifi" style="color: #667eea; margin-right: 8px;"></i>
                                 <span style="color: #666; font-size: 0.9em;">ISP:</span>
                                 <div style="font-weight: bold; margin-top: 5px; color: #333;">${ipData.isp}</div>
                             </div>
-                            
                             <div style="background: white; padding: 12px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); grid-column: span 2;">
                                 <i class="fas fa-building" style="color: #667eea; margin-right: 8px;"></i>
                                 <span style="color: #666; font-size: 0.9em;">Organization:</span>
                                 <div style="font-weight: bold; margin-top: 5px; color: #333;">${ipData.org || 'N/A'}</div>
                             </div>
-                            
                             <div style="background: white; padding: 12px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
                                 <i class="fas fa-clock" style="color: #667eea; margin-right: 8px;"></i>
                                 <span style="color: #666; font-size: 0.9em;">Timezone:</span>
                                 <div style="font-weight: bold; margin-top: 5px; color: #333;">${ipData.timezone}</div>
                             </div>
-                            
                             <div style="background: white; padding: 12px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
                                 <i class="fas fa-map-pin" style="color: #667eea; margin-right: 8px;"></i>
                                 <span style="color: #666; font-size: 0.9em;">Coordinates:</span>
@@ -2613,7 +2631,6 @@
                             </div>
                         </div>
                     </div>
-                    
                     <div style="margin-top: 20px; padding: 15px; background: linear-gradient(135deg, #667eea10, #764ba210); border-radius: 10px;">
                         <div style="display: flex; align-items: center; margin-bottom: 10px;">
                             <i class="fas fa-lightbulb" style="color: #fbbf24; margin-right: 10px;"></i>
@@ -2625,24 +2642,18 @@
                             <li>🔒 ${ipData.org ? 'Organization: ' + ipData.org : 'No organization data'}</li>
                         </ul>
                     </div>
-                    
                     <div class="developer-credit" style="margin-top: 15px; text-align: center; padding: 10px; background: linear-gradient(135deg, #667eea10, #764ba210); border-radius: 8px;">
                         <i class="fas fa-crown" style="color: #fbbf24;"></i> DEVELOPED BY <span class="neon-text" style="color: #667eea; font-weight: bold;">@TH3Cen_cee</span>
                     </div>
                 `;
-
                 document.getElementById('ipInfo').innerHTML = info;
                 showElement('ipResult');
                 showLoading('ipLoading', false);
-                
             } catch (error) {
                 try {
                     const fallbackResponse = await fetch(`https://ipapi.co/${ip}/json/`);
                     const fallbackData = await fallbackResponse.json();
-                    
-                    if (fallbackData.error) {
-                        throw new Error('Invalid IP');
-                    }
+                    if (fallbackData.error) throw new Error('Invalid IP');
                     
                     const info = `
                         <div style="background: linear-gradient(135deg, #667eea10, #764ba210); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
@@ -2650,44 +2661,37 @@
                                 <i class="fas fa-satellite-dish" style="font-size: 24px; color: #667eea; margin-right: 10px;"></i>
                                 <span style="font-weight: bold; color: #667eea;">IP INFORMATION</span>
                             </div>
-                            
                             <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
                                 <div style="background: white; padding: 12px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
                                     <i class="fas fa-globe" style="color: #667eea; margin-right: 8px;"></i>
                                     <span style="color: #666; font-size: 0.9em;">IP Address:</span>
                                     <div style="font-weight: bold; margin-top: 5px; color: #333;">${fallbackData.ip}</div>
                                 </div>
-                                
                                 <div style="background: white; padding: 12px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
                                     <i class="fas fa-map-marker-alt" style="color: #667eea; margin-right: 8px;"></i>
                                     <span style="color: #666; font-size: 0.9em;">Country:</span>
                                     <div style="font-weight: bold; margin-top: 5px; color: #333;">${fallbackData.country_name}</div>
                                 </div>
-                                
                                 <div style="background: white; padding: 12px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
                                     <i class="fas fa-map" style="color: #667eea; margin-right: 8px;"></i>
                                     <span style="color: #666; font-size: 0.9em;">Region:</span>
                                     <div style="font-weight: bold; margin-top: 5px; color: #333;">${fallbackData.region}</div>
                                 </div>
-                                
                                 <div style="background: white; padding: 12px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
                                     <i class="fas fa-city" style="color: #667eea; margin-right: 8px;"></i>
                                     <span style="color: #666; font-size: 0.9em;">City:</span>
                                     <div style="font-weight: bold; margin-top: 5px; color: #333;">${fallbackData.city}</div>
                                 </div>
-                                
                                 <div style="background: white; padding: 12px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); grid-column: span 2;">
                                     <i class="fas fa-building" style="color: #667eea; margin-right: 8px;"></i>
                                     <span style="color: #666; font-size: 0.9em;">Organization:</span>
                                     <div style="font-weight: bold; margin-top: 5px; color: #333;">${fallbackData.org || 'N/A'}</div>
                                 </div>
-                                
                                 <div style="background: white; padding: 12px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
                                     <i class="fas fa-clock" style="color: #667eea; margin-right: 8px;"></i>
                                     <span style="color: #666; font-size: 0.9em;">Timezone:</span>
                                     <div style="font-weight: bold; margin-top: 5px; color: #333;">${fallbackData.timezone}</div>
                                 </div>
-                                
                                 <div style="background: white; padding: 12px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
                                     <i class="fas fa-map-pin" style="color: #667eea; margin-right: 8px;"></i>
                                     <span style="color: #666; font-size: 0.9em;">Coordinates:</span>
@@ -2695,7 +2699,6 @@
                                 </div>
                             </div>
                         </div>
-                        
                         <div style="margin-top: 20px; padding: 15px; background: linear-gradient(135deg, #667eea10, #764ba210); border-radius: 10px;">
                             <div style="display: flex; align-items: center; margin-bottom: 10px;">
                                 <i class="fas fa-lightbulb" style="color: #fbbf24; margin-right: 10px;"></i>
@@ -2707,15 +2710,12 @@
                                 <li>🔒 Currency: ${fallbackData.currency || 'N/A'}</li>
                             </ul>
                         </div>
-                        
                         <div class="developer-credit" style="margin-top: 15px; text-align: center; padding: 10px; background: linear-gradient(135deg, #667eea10, #764ba210); border-radius: 8px;">
                             <i class="fas fa-crown" style="color: #fbbf24;"></i> DEVELOPED BY <span class="neon-text" style="color: #667eea; font-weight: bold;">@TH3Cen_cee</span>
                         </div>
                     `;
-                    
                     document.getElementById('ipInfo').innerHTML = info;
                     showElement('ipResult');
-                    
                 } catch (fallbackError) {
                     showError('ipError', '⚠️ CANNOT FETCH IP INFORMATION. PLEASE TRY AGAIN.');
                 } finally {
@@ -2726,9 +2726,7 @@
 
         async function getMyIP() {
             showLoading('ipLoading', true);
-            hideElement('ipResult');
-            hideElement('ipError');
-            
+            hideElement('ipResult'); hideElement('ipError');
             try {
                 const response = await fetch('https://api.ipify.org?format=json');
                 const data = await response.json();
@@ -2743,8 +2741,7 @@
         // ==================== GMAIL GENERATOR FUNCTIONS ====================
         function generateAccounts(amount) {
             showLoading('gmailLoading', true);
-            hideElement('gmailResult');
-            hideElement('gmailError');
+            hideElement('gmailResult'); hideElement('gmailError');
             accounts = [];
 
             setTimeout(() => {
@@ -2754,18 +2751,15 @@
                             <i class="fas fa-envelope-open-text" style="font-size: 24px; color: #667eea; margin-right: 10px;"></i>
                             <span style="font-weight: bold; color: #667eea;">GENERATED ACCOUNTS</span>
                         </div>
-                        
                         <div class="account-stats">
                             <span><i class="fas fa-envelope"></i> ${amount} ACCOUNTS</span>
                             <span><i class="fas fa-clock"></i> ${new Date().toLocaleTimeString()}</span>
                         </div>
                 `;
-
                 for (let i = 0; i < amount; i++) {
                     const email = generateEmail();
                     const password = generatePassword();
                     accounts.push({email, password});
-                    
                     html += `
                         <div class="account-item">
                             <div class="account-number">
@@ -2789,7 +2783,6 @@
                         </div>
                     `;
                 }
-
                 html += `
                         <div style="display: flex; gap: 10px; margin-top: 15px;">
                             <button class="btn-secondary" style="flex: 1;" onclick="copyAllAccounts()">
@@ -2800,12 +2793,10 @@
                             </button>
                         </div>
                     </div>
-                    
                     <div class="developer-credit" style="margin-top: 15px; text-align: center; padding: 10px; background: linear-gradient(135deg, #667eea10, #764ba210); border-radius: 8px;">
                         <i class="fas fa-crown" style="color: #fbbf24;"></i> DEVELOPED BY <span class="neon-text" style="color: #667eea; font-weight: bold;">@TH3Cen_cee</span>
                     </div>
                 `;
-
                 document.getElementById('accountsList').innerHTML = html;
                 showElement('gmailResult');
                 showLoading('gmailLoading', false);
@@ -2817,11 +2808,9 @@
             const firstNames = ['john', 'jane', 'mike', 'sarah', 'david', 'emma', 'chris', 'lisa', 'kevin', 'amy', 'alex', 'jessica', 'ryan', 'olivia', 'daniel'];
             const lastNames = ['smith', 'johnson', 'williams', 'brown', 'jones', 'garcia', 'miller', 'davis', 'rodriguez', 'martinez'];
             const numbers = Math.floor(Math.random() * 9000) + 1000;
-            
             const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
             const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
             const useNumber = Math.random() > 0.5;
-            
             if (useNumber) {
                 return `${firstName}.${lastName}${numbers}@gmail.com`;
             } else {
@@ -2841,14 +2830,12 @@
         function generateStrongPassword() {
             const password = generatePassword(24);
             accounts = [{email: 'STRONG PASSWORD', password: password}];
-            
             const html = `
                 <div style="background: linear-gradient(135deg, #667eea10, #764ba210); padding: 15px; border-radius: 10px;">
                     <div style="display: flex; align-items: center; margin-bottom: 15px;">
                         <i class="fas fa-key" style="font-size: 24px; color: #667eea; margin-right: 10px;"></i>
                         <span style="font-weight: bold; color: #667eea;">STRONG PASSWORD</span>
                     </div>
-                    
                     <div style="background: white; padding: 20px; border-radius: 8px; text-align: center;">
                         <i class="fas fa-lock" style="font-size: 32px; color: #10b981; margin-bottom: 10px;"></i>
                         <div style="font-family: monospace; font-size: 1.2em; padding: 15px; background: #f0f3ff; border-radius: 8px; word-break: break-all;">
@@ -2858,13 +2845,11 @@
                             <i class="fas fa-copy"></i> COPY PASSWORD
                         </button>
                     </div>
-                    
                     <div class="developer-credit" style="margin-top: 15px; text-align: center; padding: 10px; background: linear-gradient(135deg, #667eea10, #764ba210); border-radius: 8px;">
                         <i class="fas fa-crown" style="color: #fbbf24;"></i> DEVELOPED BY <span class="neon-text" style="color: #667eea; font-weight: bold;">@TH3Cen_cee</span>
                     </div>
                 </div>
             `;
-            
             document.getElementById('accountsList').innerHTML = html;
             showElement('gmailResult');
             showToast('🔐 Strong password generated!');
@@ -2877,16 +2862,13 @@
             const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
             const number = Math.floor(Math.random() * 9000) + 1000;
             const username = prefix + number + suffix;
-            
             accounts = [{email: 'USERNAME', password: username}];
-            
             const html = `
                 <div style="background: linear-gradient(135deg, #667eea10, #764ba210); padding: 15px; border-radius: 10px;">
                     <div style="display: flex; align-items: center; margin-bottom: 15px;">
                         <i class="fas fa-gamepad" style="font-size: 24px; color: #667eea; margin-right: 10px;"></i>
                         <span style="font-weight: bold; color: #667eea;">COOL USERNAME</span>
                     </div>
-                    
                     <div style="background: white; padding: 20px; border-radius: 8px; text-align: center;">
                         <i class="fas fa-user" style="font-size: 32px; color: #764ba2; margin-bottom: 10px;"></i>
                         <div style="font-size: 1.5em; font-weight: bold; color: #333;">
@@ -2896,36 +2878,23 @@
                             <i class="fas fa-copy"></i> COPY USERNAME
                         </button>
                     </div>
-                    
                     <div class="developer-credit" style="margin-top: 15px; text-align: center; padding: 10px; background: linear-gradient(135deg, #667eea10, #764ba210); border-radius: 8px;">
                         <i class="fas fa-crown" style="color: #fbbf24;"></i> DEVELOPED BY <span class="neon-text" style="color: #667eea; font-weight: bold;">@TH3Cen_cee</span>
                     </div>
                 </div>
             `;
-            
             document.getElementById('accountsList').innerHTML = html;
             showElement('gmailResult');
             showToast('🎮 Cool username generated!');
         }
 
         function exportAccounts() {
-            if (accounts.length === 0) {
-                showError('gmailError', '⚠️ NO ACCOUNTS GENERATED YET');
-                return;
-            }
-
-            let text = 'GENERATED ACCOUNTS\n';
-            text += '===================\n';
-            text += 'DEVELOPED BY @TH3Cen_cee\n\n';
-            
+            if (accounts.length === 0) { showError('gmailError', '⚠️ NO ACCOUNTS GENERATED YET'); return; }
+            let text = 'GENERATED ACCOUNTS\n===================\nDEVELOPED BY @TH3Cen_cee\n\n';
             accounts.forEach((acc, index) => {
-                text += `[${index + 1}] EMAIL: ${acc.email}\n`;
-                text += `    PASS: ${acc.password}\n`;
-                text += '-------------------\n';
+                text += `[${index + 1}] EMAIL: ${acc.email}\n    PASS: ${acc.password}\n-------------------\n`;
             });
-            
             text += '\n⚡ HAKK TOOL ⚡ - DEVELOPED BY @TH3Cen_cee';
-
             const blob = new Blob([text], { type: 'text/plain' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -2937,16 +2906,9 @@
         }
 
         function exportAccountsCSV() {
-            if (accounts.length === 0) {
-                showError('gmailError', '⚠️ NO ACCOUNTS GENERATED YET');
-                return;
-            }
-            
+            if (accounts.length === 0) { showError('gmailError', '⚠️ NO ACCOUNTS GENERATED YET'); return; }
             let csv = 'Email,Password\n';
-            accounts.forEach(acc => {
-                csv += `"${acc.email}","${acc.password}"\n`;
-            });
-            
+            accounts.forEach(acc => { csv += `"${acc.email}","${acc.password}"\n`; });
             const blob = new Blob([csv], { type: 'text/csv' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -2958,16 +2920,9 @@
         }
 
         function copyAllAccounts() {
-            if (accounts.length === 0) {
-                showError('gmailError', '⚠️ NO ACCOUNTS GENERATED YET');
-                return;
-            }
-            
+            if (accounts.length === 0) { showError('gmailError', '⚠️ NO ACCOUNTS GENERATED YET'); return; }
             let text = '';
-            accounts.forEach((acc, index) => {
-                text += `${acc.email}:${acc.password}\n`;
-            });
-            
+            accounts.forEach((acc) => { text += `${acc.email}:${acc.password}\n`; });
             copyToClipboard(text);
             showToast(`📋 Copied ${accounts.length} accounts to clipboard!`);
         }
@@ -2983,39 +2938,27 @@
         // ==================== LINK CHECKER FUNCTIONS ====================
         function checkLink() {
             const link = document.getElementById('linkInput').value.trim();
-            
-            if (!link) {
-                showError('linkError', '⚠️ PLEASE ENTER A URL');
-                return;
-            }
-
-            if (!link.startsWith('http')) {
-                showError('linkError', '⚠️ URL MUST START WITH http:// OR https://');
-                return;
-            }
+            if (!link) { showError('linkError', '⚠️ PLEASE ENTER A URL'); return; }
+            if (!link.startsWith('http')) { showError('linkError', '⚠️ URL MUST START WITH http:// OR https://'); return; }
 
             showLoading('linkLoading', true);
-            hideElement('linkResult');
-            hideElement('linkError');
+            hideElement('linkResult'); hideElement('linkError');
 
             setTimeout(() => {
                 try {
                     const analysis = analyzeLink(link);
-                    
                     let resultHTML = `
                         <div style="background: linear-gradient(135deg, #667eea10, #764ba210); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
                             <div style="display: flex; align-items: center; margin-bottom: 15px;">
                                 <i class="fas fa-link" style="font-size: 24px; color: #667eea; margin-right: 10px;"></i>
                                 <span style="font-weight: bold; color: #667eea;">URL SCANNED</span>
                             </div>
-                            
                             <div style="background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); word-break: break-all; margin-bottom: 15px;">
                                 <i class="fas fa-globe" style="color: #667eea; margin-right: 8px;"></i>
                                 <span style="color: #666;">${link}</span>
                             </div>
                         </div>
                     `;
-                    
                     if (analysis.safe) {
                         resultHTML += `
                             <div style="background: linear-gradient(135deg, #10b98110, #10b98120); padding: 20px; border-radius: 10px; margin-bottom: 15px; text-align: center;">
@@ -3032,17 +2975,14 @@
                             </div>
                         `;
                     }
-                    
                     resultHTML += `
                         <div style="background: linear-gradient(135deg, #667eea10, #764ba210); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
                             <div style="display: flex; align-items: center; margin-bottom: 15px;">
                                 <i class="fas fa-exclamation-circle" style="color: #fbbf24; margin-right: 10px;"></i>
                                 <span style="font-weight: bold; color: #667eea;">SCAN RESULTS:</span>
                             </div>
-                            
                             <div style="display: flex; flex-direction: column; gap: 8px;">
                     `;
-                    
                     analysis.warnings.forEach(warning => {
                         const isWarning = warning.includes('⚠️');
                         resultHTML += `
@@ -3052,47 +2992,15 @@
                             </div>
                         `;
                     });
-                    
                     resultHTML += `
                             </div>
                         </div>
-                    `;
-                    
-                    resultHTML += `
-                        <div style="background: linear-gradient(135deg, #667eea10, #764ba210); padding: 20px; border-radius: 10px; margin-bottom: 15px;">
-                            <div style="display: flex; align-items: center; margin-bottom: 15px;">
-                                <i class="fas fa-lightbulb" style="color: #fbbf24; font-size: 20px; margin-right: 10px;"></i>
-                                <span style="font-weight: bold; color: #667eea;">SAFETY TIPS:</span>
-                            </div>
-                            
-                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-                                <div style="background: white; padding: 12px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                                    <i class="fas fa-lock" style="color: #10b981; margin-right: 8px;"></i>
-                                    <span style="color: #666;">Use HTTPS</span>
-                                </div>
-                                <div style="background: white; padding: 12px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                                    <i class="fas fa-shield-alt" style="color: #667eea; margin-right: 8px;"></i>
-                                    <span style="color: #666;">Avoid short links</span>
-                                </div>
-                                <div style="background: white; padding: 12px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                                    <i class="fas fa-user-secret" style="color: #764ba2; margin-right: 8px;"></i>
-                                    <span style="color: #666;">Check domain age</span>
-                                </div>
-                                <div style="background: white; padding: 12px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                                    <i class="fas fa-search" style="color: #f59e0b; margin-right: 8px;"></i>
-                                    <span style="color: #666;">Verify sender</span>
-                                </div>
-                            </div>
-                        </div>
-                        
                         <div class="developer-credit" style="margin-top: 15px; text-align: center; padding: 10px; background: linear-gradient(135deg, #667eea10, #764ba210); border-radius: 8px;">
                             <i class="fas fa-crown" style="color: #fbbf24;"></i> DEVELOPED BY <span class="neon-text" style="color: #667eea; font-weight: bold;">@TH3Cen_cee</span>
                         </div>
                     `;
-                    
                     document.getElementById('linkInfo').innerHTML = resultHTML;
                     showElement('linkResult');
-                    
                 } catch (error) {
                     showError('linkError', '⚠️ ERROR ANALYZING LINK');
                 } finally {
@@ -3102,112 +3010,74 @@
         }
 
         function analyzeLink(link) {
-            const result = {
-                safe: true,
-                warnings: []
-            };
-            
+            const result = { safe: true, warnings: [] };
             const linkLower = link.toLowerCase();
-            
-            const phishingKeywords = [
-                "login", "signin", "verify", "secure", "update", "confirm",
-                "banking", "paypal", "amazon", "facebook", "google",
-                "free", "bonus", "gift", "prize", "winner", "claim", 
-                "password", "account", "wallet", "bitcoin", "crypto",
-                "urgent", "suspended", "limited", "unlock"
-            ];
-            
+            const phishingKeywords = ["login", "signin", "verify", "secure", "update", "confirm", "banking", "paypal", "amazon", "facebook", "google", "free", "bonus", "gift", "prize", "winner", "claim", "password", "account", "wallet", "bitcoin", "crypto", "urgent", "suspended", "limited", "unlock"];
             phishingKeywords.forEach(keyword => {
                 if (linkLower.includes(keyword)) {
                     result.warnings.push(`⚠️ Suspicious keyword detected: "${keyword}"`);
                     result.safe = false;
                 }
             });
-            
-            const suspiciousTLDs = [
-                ".xyz", ".top", ".club", ".online", ".site", ".live",
-                ".tk", ".ml", ".ga", ".cf", ".gq",
-                ".work", ".download", ".review", ".date", ".men"
-            ];
-            
+            const suspiciousTLDs = [".xyz", ".top", ".club", ".online", ".site", ".live", ".tk", ".ml", ".ga", ".cf", ".gq", ".work", ".download", ".review", ".date", ".men"];
             try {
                 const url = new URL(link);
                 const domain = url.hostname;
-                
                 suspiciousTLDs.forEach(tld => {
                     if (domain.endsWith(tld)) {
                         result.warnings.push(`⚠️ Suspicious domain extension: ${tld}`);
                         result.safe = false;
                     }
                 });
-                
                 const ipRegex = /^(\d{1,3}\.){3}\d{1,3}$/;
                 if (ipRegex.test(domain)) {
-                    result.warnings.push(`⚠️ Link uses IP address instead of domain name (common in scams)`);
+                    result.warnings.push(`⚠️ Link uses IP address instead of domain name`);
                     result.safe = false;
                 }
-                
-                const shorteners = [
-                    "bit.ly", "tinyurl", "tiny.cc", "goo.gl", "ow.ly",
-                    "is.gd", "buff.ly", "adf.ly", "shorte.st", "cutt.ly"
-                ];
-                
+                const shorteners = ["bit.ly", "tinyurl", "tiny.cc", "goo.gl", "ow.ly", "is.gd", "buff.ly", "adf.ly", "shorte.st", "cutt.ly"];
                 shorteners.forEach(shortener => {
                     if (domain.includes(shortener)) {
-                        result.warnings.push(`⚠️ Shortened URL detected (${shortener}) - destination hidden`);
+                        result.warnings.push(`⚠️ Shortened URL detected (${shortener})`);
                         result.safe = false;
                     }
                 });
-                
                 if (!link.startsWith("https://")) {
                     result.warnings.push(`⚠️ Website does not use HTTPS (not secure)`);
                     result.safe = false;
                 }
-                
-                const suspiciousPaths = [
-                    "/login.php", "/signin", "/verify", "/secure",
-                    "/update-info", "/confirm", "/wallet", "/payment"
-                ];
-                
+                const suspiciousPaths = ["/login.php", "/signin", "/verify", "/secure", "/update-info", "/confirm", "/wallet", "/payment"];
                 suspiciousPaths.forEach(path => {
                     if (linkLower.includes(path)) {
-                        result.warnings.push(`⚠️ Suspicious path detected: ${path} (could be phishing page)`);
+                        result.warnings.push(`⚠️ Suspicious path detected: ${path}`);
                         result.safe = false;
                     }
                 });
-                
                 const subdomainCount = domain.split('.').length - 2;
                 if (subdomainCount > 2) {
                     result.warnings.push(`⚠️ Unusual number of subdomains (${subdomainCount})`);
                     result.safe = false;
                 }
-                
                 const numbersInDomain = (domain.match(/\d/g) || []).length;
                 if (numbersInDomain > 5) {
                     result.warnings.push(`⚠️ Unusual amount of numbers in domain (${numbersInDomain})`);
                     result.safe = false;
                 }
-                
             } catch (e) {
                 result.warnings.push(`⚠️ Invalid URL format`);
                 result.safe = false;
             }
-            
             if (link.length > 200) {
                 result.warnings.push(`⚠️ Very long URL (${link.length} characters)`);
                 result.safe = false;
             }
-            
             const specialChars = (link.match(/[%@!*$]/g) || []).length;
             if (specialChars > 5) {
                 result.warnings.push(`⚠️ Unusual number of special characters (${specialChars})`);
                 result.safe = false;
             }
-            
             if (result.warnings.length === 0) {
                 result.warnings.push("✅ No suspicious patterns detected");
             }
-            
             return result;
         }
 
@@ -3215,45 +3085,27 @@
         function generateRepeat() {
             const text = document.getElementById('repeatText').value.trim();
             let count = parseInt(document.getElementById('repeatCount').value);
-            
-            if (!text) {
-                showError('repeatError', '⚠️ PLEASE ENTER SOME TEXT');
-                return;
-            }
-            
-            if (isNaN(count) || count < 1) {
-                count = 1;
-            }
-            
+            if (!text) { showError('repeatError', '⚠️ PLEASE ENTER SOME TEXT'); return; }
+            if (isNaN(count) || count < 1) count = 1;
             if (count > 1000) {
                 showError('repeatError', '⚠️ MAXIMUM LIMIT IS 1000 TIMES ONLY!');
                 document.getElementById('repeatCount').value = 1000;
                 count = 1000;
                 return;
             }
-            
             showLoading('repeatLoading', true);
-            hideElement('repeatResult');
-            hideElement('repeatError');
-            
+            hideElement('repeatResult'); hideElement('repeatError');
             setTimeout(() => {
                 try {
                     const startTime = performance.now();
-                    
                     let result = '';
-                    for (let i = 1; i <= count; i++) {
-                        result += `${i}. ${text}\n`;
-                    }
-                    
+                    for (let i = 1; i <= count; i++) { result += `${i}. ${text}\n`; }
                     const endTime = performance.now();
                     const timeTaken = ((endTime - startTime) / 1000).toFixed(2);
-                    
                     document.getElementById('repeatContent').innerHTML = result.replace(/\n/g, '<br>');
                     document.getElementById('repeatCountDisplay').innerText = count;
                     document.getElementById('repeatTimeDisplay').innerText = timeTaken;
-                    
                     showElement('repeatResult');
-                    
                 } catch (error) {
                     showError('repeatError', '⚠️ ERROR GENERATING TEXT');
                 } finally {
@@ -3271,12 +3123,7 @@
 
         function copyRepeat() {
             const content = document.getElementById('repeatContent').innerText;
-            
-            if (!content) {
-                showError('repeatError', '⚠️ NO CONTENT TO COPY');
-                return;
-            }
-            
+            if (!content) { showError('repeatError', '⚠️ NO CONTENT TO COPY'); return; }
             copyToClipboard(content);
         }
 
@@ -3284,20 +3131,8 @@
             const content = document.getElementById('repeatContent').innerText;
             const text = document.getElementById('repeatText').value.trim();
             const count = document.getElementById('repeatCount').value;
-            
-            if (!content) {
-                showError('repeatError', '⚠️ NO CONTENT TO DOWNLOAD');
-                return;
-            }
-            
-            let header = `REPEATED TEXT\n`;
-            header += `================\n`;
-            header += `TEXT: "${text}"\n`;
-            header += `COUNT: ${count} TIMES\n`;
-            header += `GENERATED: ${new Date().toLocaleString()}\n`;
-            header += `DEVELOPED BY @TH3Cen_cee\n`;
-            header += `================\n\n`;
-            
+            if (!content) { showError('repeatError', '⚠️ NO CONTENT TO DOWNLOAD'); return; }
+            let header = `REPEATED TEXT\n================\nTEXT: "${text}"\nCOUNT: ${count} TIMES\nGENERATED: ${new Date().toLocaleString()}\nDEVELOPED BY @TH3Cen_cee\n================\n\n`;
             const blob = new Blob([header + content], { type: 'text/plain' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -3311,57 +3146,20 @@
         // ==================== PASSWORD STRENGTH CHECKER ====================
         function checkPasswordStrength() {
             const password = document.getElementById('passwordInput').value;
-            
-            if (!password) {
-                showError('passwordError', '⚠️ PLEASE ENTER A PASSWORD');
-                return;
-            }
-            
+            if (!password) { showError('passwordError', '⚠️ PLEASE ENTER A PASSWORD'); return; }
             let strength = 0;
             let feedback = [];
-            
-            if (password.length >= 8) strength += 20;
-            else if (password.length >= 6) strength += 10;
-            else feedback.push('⚠️ Password is too short (min 8 characters)');
-            
-            if (/[A-Z]/.test(password)) strength += 20;
-            else feedback.push('⚠️ Add uppercase letters');
-            
-            if (/[a-z]/.test(password)) strength += 20;
-            else feedback.push('⚠️ Add lowercase letters');
-            
-            if (/\d/.test(password)) strength += 20;
-            else feedback.push('⚠️ Add numbers');
-            
-            if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) strength += 20;
-            else feedback.push('⚠️ Add special characters (!@#$%^&*)');
-            
-            let strengthText = '';
-            let strengthColor = '';
-            let strengthIcon = '';
-            
-            if (strength >= 80) {
-                strengthText = 'VERY STRONG';
-                strengthColor = '#10b981';
-                strengthIcon = '💪';
-            } else if (strength >= 60) {
-                strengthText = 'STRONG';
-                strengthColor = '#3b82f6';
-                strengthIcon = '🔒';
-            } else if (strength >= 40) {
-                strengthText = 'MEDIUM';
-                strengthColor = '#f59e0b';
-                strengthIcon = '⚠️';
-            } else if (strength >= 20) {
-                strengthText = 'WEAK';
-                strengthColor = '#ef4444';
-                strengthIcon = '🔓';
-            } else {
-                strengthText = 'VERY WEAK';
-                strengthColor = '#ef4444';
-                strengthIcon = '❌';
-            }
-            
+            if (password.length >= 8) strength += 20; else if (password.length >= 6) strength += 10; else feedback.push('⚠️ Password is too short (min 8 characters)');
+            if (/[A-Z]/.test(password)) strength += 20; else feedback.push('⚠️ Add uppercase letters');
+            if (/[a-z]/.test(password)) strength += 20; else feedback.push('⚠️ Add lowercase letters');
+            if (/\d/.test(password)) strength += 20; else feedback.push('⚠️ Add numbers');
+            if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) strength += 20; else feedback.push('⚠️ Add special characters (!@#$%^&*)');
+            let strengthText = '', strengthColor = '', strengthIcon = '';
+            if (strength >= 80) { strengthText = 'VERY STRONG'; strengthColor = '#10b981'; strengthIcon = '💪'; }
+            else if (strength >= 60) { strengthText = 'STRONG'; strengthColor = '#3b82f6'; strengthIcon = '🔒'; }
+            else if (strength >= 40) { strengthText = 'MEDIUM'; strengthColor = '#f59e0b'; strengthIcon = '⚠️'; }
+            else if (strength >= 20) { strengthText = 'WEAK'; strengthColor = '#ef4444'; strengthIcon = '🔓'; }
+            else { strengthText = 'VERY WEAK'; strengthColor = '#ef4444'; strengthIcon = '❌'; }
             let html = `
                 <div style="text-align: center;">
                     <div style="font-size: 48px; margin-bottom: 10px;">${strengthIcon}</div>
@@ -3372,7 +3170,6 @@
                     <p style="color: #666; margin-bottom: 10px;"><strong>Strength Score:</strong> ${strength}/100</p>
                     <p style="color: #666; margin-bottom: 10px;"><strong>Length:</strong> ${password.length} characters</p>
             `;
-            
             if (feedback.length > 0 && strength < 80) {
                 html += `
                     <div style="margin-top: 15px; padding: 10px; background: #fef3c7; border-radius: 8px;">
@@ -3390,14 +3187,12 @@
                     </div>
                 `;
             }
-            
             html += `
                     <div class="developer-credit" style="margin-top: 15px; text-align: center; padding: 10px; background: linear-gradient(135deg, #667eea10, #764ba210); border-radius: 8px;">
                         <i class="fas fa-crown" style="color: #fbbf24;"></i> DEVELOPED BY <span class="neon-text" style="color: #667eea; font-weight: bold;">@TH3Cen_cee</span>
                     </div>
                 </div>
             `;
-            
             document.getElementById('passwordInfo').innerHTML = html;
             showElement('passwordResult');
             hideElement('passwordError');
@@ -3405,30 +3200,19 @@
 
         function togglePasswordVisibility() {
             const input = document.getElementById('passwordInput');
-            if (input.type === 'password') {
-                input.type = 'text';
-            } else {
-                input.type = 'password';
-            }
+            input.type = input.type === 'password' ? 'text' : 'password';
         }
 
         // ==================== QR CODE FUNCTIONS ====================
         function generateQRCode() {
             const text = document.getElementById('qrText').value.trim();
-            
-            if (!text) {
-                showError('qrError', '⚠️ PLEASE ENTER TEXT OR URL');
-                return;
-            }
-            
+            if (!text) { showError('qrError', '⚠️ PLEASE ENTER TEXT OR URL'); return; }
             const qrSize = 256;
             const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=${qrSize}x${qrSize}&data=${encodeURIComponent(text)}`;
-            
             const html = `
                 <img src="${qrUrl}" alt="QR Code" style="max-width: 100%; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
                 <p style="margin-top: 10px; color: #666; word-break: break-all;">${text}</p>
             `;
-            
             document.getElementById('qrImageContainer').innerHTML = html;
             showElement('qrResult');
             hideElement('qrError');
@@ -3451,23 +3235,17 @@
         // ==================== UTILITY FUNCTIONS ====================
         function showLoading(elementId, show) {
             const element = document.getElementById(elementId);
-            if (element) {
-                element.style.display = show ? 'flex' : 'none';
-            }
+            if (element) element.style.display = show ? 'flex' : 'none';
         }
 
         function showElement(elementId) {
             const element = document.getElementById(elementId);
-            if (element) {
-                element.style.display = 'block';
-            }
+            if (element) element.style.display = 'block';
         }
 
         function hideElement(elementId) {
             const element = document.getElementById(elementId);
-            if (element) {
-                element.style.display = 'none';
-            }
+            if (element) element.style.display = 'none';
         }
 
         function showError(elementId, message) {
@@ -3475,10 +3253,7 @@
             if (element) {
                 element.innerHTML = message + '<br><br><span style="font-size:0.9em;"><i class="fas fa-crown"></i> DEVELOPED BY @TH3Cen_cee</span>';
                 element.style.display = 'block';
-                
-                setTimeout(() => {
-                    element.style.display = 'none';
-                }, 4000);
+                setTimeout(() => { element.style.display = 'none'; }, 4000);
             }
         }
     </script>
